@@ -114,6 +114,8 @@ venv.bak/
 .idea/
 migrations/
 
+bootstrap/
+
 # Spyder project settings
 .spyderproject
 .spyproject
