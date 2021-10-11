@@ -19,10 +19,10 @@
               <a class="nav-link" href="./index.html"><i class="fas fa-home"></i><span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="./blog_list.html"><i class="fas fa-blog"></i></a>
+              <a class="nav-link" href="./blog_list.html">Blog</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="./about_me.html"><i class="far fa-user"></i></a>
+              <a class="nav-link" href="./about_me.html">About Me</a>
             </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -73,10 +73,11 @@
     </div>
   </div>
 </div>
-
       <div class="container mt-3">
         <div class="row">
-          <div class="col-md-8 col-lg-9">
+          <div class="col-md-8 col-lg-9" id="main-area">
+              <h1>Blog</h1>
+                {% if post_list.exists %}
               {% for p in post_list %}
               <!-- Blog post-->
               <div class="card mb-4">
@@ -89,7 +90,7 @@
 
                     <h2 class="card-title h4">{{ p.title | upper }}</h2>
                     {% if p.hook_text %}
-                        <h5 class="text_muted"> {{ p.hook_text }}</h5>
+                        <h5 class="text-muted"> {{ p.hook_text }}</h5>
                     {% endif %}
                     <p class="card-text">{{ p.content | truncatechars:100 }}</p>
                     <a class="btn btn-primary" href="{{ p.get_absolute_url }}">Read more →</a>
@@ -100,6 +101,9 @@
                   </div>
               </div>
               {% endfor %}
+              {% else %}
+                <h2>아직 게시물이 없습니다.</h2>
+              {% endif %}
           <!-- Pagination-->
             <ul class="pagination justify-content-center my-4">
                 <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">&larr; Newer</a></li>
