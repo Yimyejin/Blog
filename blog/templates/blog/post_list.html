@@ -1,37 +1,39 @@
+<!-- 모듈화할때 아래 두줄, 마지막줄에 endblock -->
 {% extends 'blog/base.html' %}
 {% block main_area %}
-              <h1>Blog</h1>
-                {% if post_list.exists %}
-              {% for p in post_list %}
-              <!-- Blog post-->
-              <div class="card mb-4">
-                  {% if p.head_image %}
-                    <img class="card-img-top" src="{{ p.head_image.url }}" alt="{{p}}의 head image" />
-                  {% else %}
-                    <img class="card-img-top" src="https://picsum.photos/seed/{{p.id}}/800/200" alt="random image"/>
-                  {% endif %}
-                <div class="card-body">
+<h1>Blog</h1>
+{% if post_list.exists %}
+{% for p in post_list %}
+<!-- Blog post-->
+<div class="card mb-4">
+    {% if p.head_image %}
+    <img class="card-img-top" src="{{ p.head_image.url }}" alt="{{p}}의 head image" />
+    {% else %}
+    <!-- seed/{{p.id}}/는 고정할 때 사용-->
+    <img class="card-img-top" src="https://picsum.photos/seed/{{p.id}}/800/200" alt="random image"/>
+    {% endif %}
+    <div class="card-body">
 
-                    <h2 class="card-title h4">{{ p.title | upper }}</h2>
-                    {% if p.hook_text %}
-                        <h5 class="text-muted"> {{ p.hook_text }}</h5>
-                    {% endif %}
-                    <p class="card-text">{{ p.content | truncatechars:100 }}</p>
-                    <a class="btn btn-primary" href="{{ p.get_absolute_url }}">Read more →</a>
-                </div>
-                  <div class="card-footer">
-                      <div class="small text-muted">{{ p.created_at | date:"yy-m-d h:m:s"}} by 작성자(개발 예정)
-                      </div>
-                  </div>
-              </div>
-              {% endfor %}
-              {% else %}
-                <h2>아직 게시물이 없습니다.</h2>
-              {% endif %}
-          <!-- Pagination-->
-            <ul class="pagination justify-content-center my-4">
-                <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">&larr; Newer</a></li>
-                <li class="page-item"><a class="page-link" href="#!">Older &rarr;</a></li>
-            </ul>
-          </div>
+        <h2 class="card-title h4">{{ p.title | upper }}</h2>
+        {% if p.hook_text %}
+        <h5 class="text-muted"> {{ p.hook_text }}</h5>
+        {% endif %}
+        <p class="card-text">{{ p.content | truncatechars:100 }}</p>
+        <a class="btn btn-primary" href="{{ p.get_absolute_url }}">Read more →</a>
+    </div>
+    <div class="card-footer">
+        <div class="small text-muted">{{ p.created_at | date:"yy-m-d h:m:s"}} by 작성자(개발 예정)
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% else %}
+<h2>아직 게시물이 없습니다.</h2>
+{% endif %}
+<!-- Pagination-->
+<ul class="pagination justify-content-center my-4">
+    <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">&larr; Newer</a></li>
+    <li class="page-item"><a class="page-link" href="#!">Older &rarr;</a></li>
+</ul>
+</div>
 {% endblock %}

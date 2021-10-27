@@ -1,3 +1,4 @@
+# 아래 문장은 render 임포트할때만 사용하므로 CBV로 바꿀때 삭제해도됨. DetailView도 CBV로 바꿀때 추가
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView
 
@@ -11,14 +12,15 @@ class PostList(ListView):
 
 
 #    template_name = 'blog/post_list.html'
-# post_list.html
+# 파일명 post_list.html 으로 수정
 
 class PostDetail(DetailView):
     model = Post
 
 #    template_name = 'blog/post_detail.html'
-# post_detail.html
+# post_detail.html 으로 이름 수정
 
+# FBV로 만들기
 # def index(request):
 #    posts = Post.objects.all().order_by('-pk')
 #
@@ -27,8 +29,8 @@ class PostDetail(DetailView):
 #                      'posts': posts
 #                  }
 #                  )
-
-
+# 원래는 for p in posts -> CBV에서는 for p in post_list
+# 상세페이지
 # def single_post_page(request, pk):
 #    post = Post.objects.get(pk=pk)
 #

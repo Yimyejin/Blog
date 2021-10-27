@@ -18,9 +18,11 @@ class Post(models.Model):
     def __str__(self):
         return f'[{self.pk}]{self.title}'
 
+    # post_list페이지에 제목에 링크달 때 사용
     def get_absolute_url(self):
         return f'/blog/{self.pk}'
 
+    # 파일 확장자 알 때 사용
     def get_file_name(self):
         return os.path.basename(self.file_upload.name)
 

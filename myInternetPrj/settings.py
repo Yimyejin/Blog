@@ -122,6 +122,7 @@ USE_TZ = False
 
 STATIC_URL = '/static/'
 
+#static 이미지 할때 아래 두 문장, 위에는 import os
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, '_media')
 
