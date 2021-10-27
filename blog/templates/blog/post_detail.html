@@ -8,6 +8,11 @@
 <div id="post-area">
     <!-- Post header-->
     <header class="mb-4">
+        {% if post.category %}
+            <span class="badge bg-secondary float-right">{{ post.category }}</span>
+        {% else %}
+            <span class="badge bg-secondary float-right">미분류</span>
+        {% endif %}
         <!-- Post title-->
         <h1 class="fw-bolder mb-1">{{ post.title }}</h1>
         <h5 class="text-muted"> {{ post.hook_text }}</h5>
