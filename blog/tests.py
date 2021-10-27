@@ -1,11 +1,14 @@
 from django.test import TestCase, Client
 from bs4 import BeautifulSoup
+from django.contrib.auth.models import User
 from .models import Post
 
 # Create your tests here.
 class TestView(TestCase):
     def setUp(self):
         self.client = Client()
+        self.user_james = User.objects.create_user(username='James', password='somepassword')
+        self.user_trump = User.objects.create_user(username='Trump', password='somepassword')
 
     def navbar_test(self, soup):
         # 네비게이션바가 있다 - soup.nav로 soup에 담긴 내용 중 nav요소만 가져와 navbar에 저장한다.
@@ -42,11 +45,13 @@ class TestView(TestCase):
         # 포스트(게시물)이 2개 존재하는 경우 - Post.objects.create()로 새로운 포스트를 만들 수 있음. 2개 만들고 2개인지 확인
         post_001 = Post.objects.create(
             title='첫 번째 포스트입니다.',
-            content = 'Hello World!!! We are the world...'
+            content = 'Hello World!!! We are the world...',
+            author=self.user_james
         )
         post_002 = Post.objects.create(
             title='두 번째 포스트입니다.',
-            content='1등이 전부가 아니잖아요'
+            content='1등이 전부가 아니잖아요',
+            author=self.user_trump
         )
         self.assertEqual(Post.objects.count(),2)
         # 목록페이지를 새롭게 불러와서 - 새로고침하기 위해 1,3번째줄 일부 반복
@@ -58,13 +63,16 @@ class TestView(TestCase):
         self.assertIn(post_001.title, main_area.text)
         self.assertIn(post_002.title, main_area.text)
         self.assertNotIn('아직 게시물이 없습니다.', main_area.text)
+        self.assertIn(self.user_james.username.upper(), main_area.text)
+        self.assertIn(self.user_trump.username.upper(), main_area.text)
 # post_list.html 에 본문영역에 해당하는 div 요소에 id="main-area"를 추가 -> {% if post_list.exists %} , {% else %] <h3>아직 게시물이~, {% endif %}
 
     def test_post_detail(self):
         # 포스트 하나 - 함수를 실행하면 새 데이터베이스를 만들고, 포스트를 하나 만든다.
         post_001 = Post.objects.create(
             title='첫 번째 포스트입니다.',
-            content='Hello World!!! We are the world...'
+            content='Hello World!!! We are the world...',
+            author = self.user_james
         )
         # 이 포스트의 url이 /blog/1 - 첫번째 포스트이므로 pk는 1 URL은 'blog/1/'이 된다.
         self.assertEqual(post_001.get_absolute_url(), '/blog/1')
@@ -87,4 +95,4 @@ class TestView(TestCase):
         # 포스트의 내용이 있는가 - 마지막으로 post_001의 내용이 포스트 영역에 있는지 확인한다.
         self.assertIn(post_001.content, post_area.text)
 
-        #
+        self.assertIn(self.user_james.username.upper(), post_area.text)

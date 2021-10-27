@@ -22,7 +22,7 @@
         <a class="btn btn-primary" href="{{ p.get_absolute_url }}">Read more →</a>
     </div>
     <div class="card-footer">
-        <div class="small text-muted">{{ p.created_at | date:"yy-m-d h:m:s"}} by 작성자(개발 예정)
+        <div class="small text-muted">{{ p.created_at | date:"20y-m-d h:m:s"}} by {{ p.author | upper }}
         </div>
     </div>
 </div>
