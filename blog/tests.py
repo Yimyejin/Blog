@@ -97,6 +97,29 @@ class TestView(TestCase):
         self.assertNotIn(self.post_002.title, main_area.text)
         self.assertNotIn(self.post_003.title, main_area.text)
 
+    def test_create_post(self):
+        # 포스트 목록 페이지를 가져온다
+        response = self.client.get('/blog/create_post/')
+        self.assertNotEqual(response.status_code, 200)
+        self.client.login(username='Trump', password='somepassword')
+        response = self.client.get('/blog/create_post/')
+        # 정상적으로 페이지가 로드 - 404는 오류 200이 정상
+        self.assertEqual(response.status_code, 200)
+        # 페이지 타이틀이 'Blog'
+        soup = BeautifulSoup(response.content, 'html.parser')
+        self.assertEqual(soup.title.text, 'Create Post - Blog')
+        main_area = soup.find('div', id='main-area')
+        self.assertIn('Create New Post', main_area.text)
+
+        self.client.post('/blog/create_post/',
+                         {
+                             'title' : 'Post form 만들기',
+                             'content' : "Post form 페이지 만들기"
+                         })
+        last_post = Post.objects.last()
+        self.assertEqual(last_post.title, "Post form 만들기")
+        self.assertEqual(last_post.author.username, 'Trump')
+
     def test_post_list(self):
         self.assertEqual(Post.objects.count(), 3)
 

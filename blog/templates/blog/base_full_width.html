@@ -14,39 +14,12 @@
 {% include 'blog/navbar.html' %}
 <div class="container mt-3">
     <div class="row">
-        <div class="col-md-8 col-lg-9" id="main-area">
-            <!-- 모듈화할때 아래 두 줄 -->
+        <div class="col-12" id="main-area">
             {% block main_area %}
             {% endblock %}
         </div>
-            <div class="col-md-4 col-lg-3">
-                <!-- Search widget-->
-                <div class="card mb-4">
-                    <div class="card-header"><i class="fas fa-search"></i>&nbsp;&nbsp;Search</div>
-                    <div class="card-body">
-                        <div class="input-group">
-                            <input class="form-control" type="text" placeholder="Enter search term..." aria-label="Enter search term..." aria-describedby="button-search" />
-                            <button class="btn btn-primary" id="button-search" type="button">Go!</button>
-                        </div>
-                    </div>
-                </div>
-                <!-- Categories widget-->
-                <div class="card mb-4" id="categories-card">
-                    <div class="card-header">Categories</div>
-                    <div class="card-body">
-                        <div class="row">
-                            <ul>
-                                {% for c in categories %}
-                                    <li><a href="c.get_absolute_url">{{c}} ({{c.post_set.count}})</a></li>
-                                {% endfor %}
-                                <li><a href="http://127.0.0.1:8000/blog/category/no_category/">미분류 ({{no_category_post_count}})</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
+</div>
 
     {% include 'blog/footer.html' %}
 
