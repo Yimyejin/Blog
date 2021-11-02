@@ -2,7 +2,9 @@
 {% extends 'blog/base.html' %}
 {% block main_area %}
 <h1>
-    Blog {% if category %}<span class="badge bg-secondary">{{ category }}</span>{% endif %}
+    Blog
+    {% if category %}<span class="badge bg-secondary">{{ category }}</span>{% endif %}
+    {% if tag %}<i class="fas fa-tags"></i><span class="badge bg-light">{{ tag }}({{tag.post_set.count}})</span>{% endif %}
 </h1>
 {% if post_list.exists %}
 {% for p in post_list %}
@@ -25,6 +27,13 @@
         <h5 class="text-muted"> {{ p.hook_text }}</h5>
         {% endif %}
         <p class="card-text">{{ p.content | truncatechars:100 }}</p>
+        {% if p.tags.exists %}
+            <i class="fas fa-tags"></i>
+            {% for tag in p.tags.all %}
+                <a href="{{ tag.get_absolute_url }}"><span class="badge bg-light">{{ tag }}</span></a>
+            {% endfor %}
+            <br/><br/>
+        {% endif %}
         <a class="btn btn-primary" href="{{ p.get_absolute_url }}">Read more →</a>
     </div>
     <div class="card-footer">
