@@ -19,13 +19,13 @@ class TestView(TestCase):
             title='첫 번째 포스트입니다.',
             content='Hello World!!! We are the world...',
             author=self.user_james,
-            category=self.category_culture,
+            category=self.category_programming
         )
         self.post_002 = Post.objects.create(
             title='두 번째 포스트입니다.',
             content='1등이 전부가 아니잖아요',
             author=self.user_trump,
-            category=self.category_programming,
+            category=self.category_culture
         )
         self.post_003 = Post.objects.create(
             title='세 번째 포스트입니다.',
@@ -55,6 +55,23 @@ class TestView(TestCase):
         self.assertIn(f'{self.category_programming.name} ({self.category_programming.post_set.count()})', category.text)
         self.assertIn(f'{self.category_culture.name} ({self.category_culture.post_set.count()})', category.text)
         self.assertIn(f'미분류 (1)', category.text)
+
+    def test_category_page(self):
+        # 카테고리 페이지 url로 불러오기
+        response = self.client.get(self.category_programming.get_absolute_url())
+        self.assertEqual(response.status_code, 200)
+        # beautifulsoup4로 html을 parser하기
+        soup = BeautifulSoup(response.content, 'html.parser')
+        self.navbar_test(soup)
+        self.category_test(soup)
+        # 카테고리 name을 포함하고 있는지
+        self.assertIn(self.category_programming.name, soup.h1.text)
+        # 카테고리에 포함된 post만 포함하고 있는지
+        main_area = soup.find('div', id='main-area')
+        self.assertIn(self.category_programming.name, main_area.text)
+        self.assertIn(self.post_001.title, main_area.text)
+        self.assertNotIn(self.post_002.title, main_area.text)
+        self.assertNotIn(self.post_003.title, main_area.text)
 
     def test_post_list(self):
         self.assertEqual(Post.objects.count(), 3)
