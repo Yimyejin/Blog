@@ -1,6 +1,11 @@
 <!-- 모듈화할때 아래 두줄, 마지막줄에 endblock -->
 {% extends 'blog/base.html' %}
 {% block main_area %}
+{% if user.is_authenticated %}
+    {% if user.is_staff or user.is_superuser %}
+        <a class="btn btn-info btn-small float-right" href="/blog/create_post"><i class="fas fa-pen"></i>New Post</a>
+    {% endif %}
+{% endif %}
 <h1>
     Blog
     {% if category %}<span class="badge bg-secondary">{{ category }}</span>{% endif %}
