@@ -5,6 +5,26 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .models import Post, Category, Tag
 from django.core.exceptions import PermissionDenied
 from django.utils.text import slugify
+from .forms import CommentForm
+from django.shortcuts import get_object_or_404
+
+
+def new_comment(request, pk):
+    if request.user.is_authenticated:
+        post = get_object_or_404(Post, pk=pk)
+        if request.method == 'POST':
+            comment_form = CommentForm(request.POST)
+            if comment_form.is_valid():
+                comment = comment_form.save(commit=False)
+                comment.post = post
+                comment.author = request.user
+                comment.save()
+                return redirect(comment.get_absolute_url())
+        else:
+            return redirect(post.get_absolute_url())
+    else:
+        raise PermissionDenied
+
 
 # Create your views here.
 class PostCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView):
@@ -35,14 +55,15 @@ class PostCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         else:
             return redirect('/blog/')
 
-class PostUpdate(LoginRequiredMixin, UpdateView): # 모델명_form
+
+class PostUpdate(LoginRequiredMixin, UpdateView):  # 모델명_form
     model = Post
     fields = ['title', 'hook_text', 'content', 'head_image', 'file_upload', 'category']
 
     template_name = 'blog/post_update_form.html'
 
     def dispatch(self, request, *args, **kwargs):
-        if request.user.is_authenticated and request.user == self.get_object().author :
+        if request.user.is_authenticated and request.user == self.get_object().author:
             return super(PostUpdate, self).dispatch(request, *args, **kwargs)
         else:
             raise PermissionDenied
@@ -95,6 +116,7 @@ class PostDetail(DetailView):
         context = super(PostDetail, self).get_context_data()
         context['categories'] = Category.objects.all()
         context['no_category_post_count'] = Post.objects.filter(category=None).count()
+        context['comment_form'] = CommentForm
         return context
 
 
