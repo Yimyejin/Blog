@@ -51,9 +51,27 @@
 <h2>아직 게시물이 없습니다.</h2>
 {% endif %}
 <!-- Pagination-->
+{% if is_paginated %}
 <ul class="pagination justify-content-center my-4">
-    <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">&larr; Newer</a></li>
-    <li class="page-item"><a class="page-link" href="#!">Older &rarr;</a></li>
+    {% if page_obj.has_previous %}
+    <li class="page-item">
+        <a class="page-link" href="?page={{page_obj.previous_page_number}}" tabindex="-1" aria-disabled="true">&larr; Newer</a>
+    </li>
+    {% else %}
+    <li class="page-item disabled">
+        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">&larr; Newer</a>
+    </li>
+    {% endif %}
+    {% if page_obj.has_next %}
+    <li class="page-item">
+        <a class="page-link" href="?page={{page_obj.next_page_number}}">Older &rarr;</a>
+    </li>
+    {% else %}
+    <li class="page-item disabled">
+        <a class="page-link" href="#!">Older &rarr;</a>
+    </li>
+    {% endif %}
 </ul>
+{% endif %}
 </div>
 {% endblock %}
