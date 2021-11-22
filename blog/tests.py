@@ -35,7 +35,7 @@ class TestView(TestCase):
             category=self.category_culture
         )
         self.post_003 = Post.objects.create(
-            title='세 번째 포스트입니다.',
+            title='세 번째 파이썬 포스트입니다.',
             content='세 번째 포스트입니다.',
             author=self.user_trump,
         )
@@ -47,6 +47,24 @@ class TestView(TestCase):
             author = self.user_trump,
             content = '첫번째 댓글입니다.'
         )
+
+    def test_search(self):
+        post_004 = Post.objects.create(
+            title="파이썬에 대한 포스트입니다.",
+            content="Hello world...",
+            author=self.user_trump
+        )
+
+        response = self.client.get('/blog/search/파이썬/')
+        self.assertEqual(response.status_code, 200)
+
+        soup = BeautifulSoup(response.content, 'html.parser')
+        main_area = soup.find('div', id='main-area')
+        self.assertIn('Search : 파이썬(2)', main_area.text)
+        self.assertNotIn(self.post_001.title, main_area.text)
+        self.assertNotIn(self.post_002.title, main_area.text)
+        self.assertIn(self.post_003.title, main_area.text)
+        self.assertIn(post_004.title, main_area.text)
 
     def test_comment_form(self):
         self.assertEqual(Comment.objects.count(), 1)

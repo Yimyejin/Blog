@@ -8,6 +8,7 @@
 {% endif %}
 <h1>
     Blog
+    {% if search_info %}<span class="badge bg-secondary">{{ search_info }}</span>{% endif %}
     {% if category %}<span class="badge bg-secondary">{{ category }}</span>{% endif %}
     {% if tag %}<i class="fas fa-tags"></i><span class="badge bg-light">{{ tag }}({{tag.post_set.count}})</span>{% endif %}
 </h1>
